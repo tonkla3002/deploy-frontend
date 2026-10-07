@@ -1,0 +1,18 @@
+services:
+  frontend:
+    build: .
+    image: frontend:latest
+    container_name: frontend
+    restart: unless-stopped
+    environment:
+      # default reaches the backend container over app-net
+      API_URL: ${API_URL:-http://backend:4000}
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    networks:
+      - app-net
+
+networks:
+  # shared with the backend repo; create once: docker network create app-net
+  app-net:
+    external: true
